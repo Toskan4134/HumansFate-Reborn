@@ -1,5 +1,12 @@
 package game;
 
+import java.util.List;
+
+import com.badlogic.gdx.utils.Array;
+
+import elements.Interaction;
+import screens.GameScreen;
+
 public class Params {
 
 //Screen
@@ -15,20 +22,39 @@ public class Params {
 	public static float musicVolume = 0.04f;
 	public static float soundVolume = 1;
 
-// public static float zoom=0.24f;
-	public static float zoom = 0.30f;
+	// public static float zoom=0.24f;
+	public static float zoom = 1f;
+
+	// Jugador
+	public static float jugadorx = 352;
+	public static float jugadory = 576;
+	public static int acceleration = 100;
+	public static int maxSpeed = 300;
+	public static int deceleration = 70;
 
 	// variables de juego
+	public static GameScreen gameScreen;
+	public static final int MAX_DAYS = 20;
+	public static int days;
+	public static final float MAX_SECS_PER_ROUND = 45f;
+	public static float secsPerRound;
+	public static String deathCause;
 
-	public static int nivel = 0;
+	public static final int MAX_POINTS = 12;
+	public static final int HUNGER_LOSS = 3;
+	public static final int THIRST_LOSS = 6;
+	public static final int SLEEP_LOSS = 4;
+	public static final int EXERCISE_LOSS = 4;
+	public static final int POOP_LOSS = 3;
+	public static int hunger;
+	public static int thirst;
+	public static int sleep;
+	public static int exercise;
+	public static int poop;
 
-	public static float jugadorx = 0;
-	public static float jugadory = 0;
-	public static int vida = 50;
-	public static int maxVida = 50;
-	public static int acceleration = 50;
-	public static int maxSpeed = 150;
-	public static int deceleration = 30;
+	// Minigame
+	public static int progressBarCount;
+	public static boolean enabledMinigameUI;
 
 	public static int getAnchoPantalla() {
 		return anchoPantalla;

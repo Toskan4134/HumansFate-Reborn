@@ -27,14 +27,14 @@ public class BScreen implements Screen, InputProcessor {
 
 	InputMultiplexer im;
 
-	Stage uiStage;
+	public Stage uiStage;
 
 	public BScreen(Demo game) {
 
 		this.uiStage = new Stage();
 
 		BitmapFont font = new BitmapFont();
-		font.getData().setScale(3);
+		font.getData().setScale(2);
 		uiStyle = new LabelStyle(font, Color.WHITE);
 
 		this.game = game;

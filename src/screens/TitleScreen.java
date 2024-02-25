@@ -1,6 +1,8 @@
 package screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputEvent.Type;
@@ -13,49 +15,62 @@ import game.Params;
 import managers.ResourceManager;
 
 public class TitleScreen extends BScreen {
-	private Table tabla;
+    private Table tabla;
 
-	public TitleScreen(Demo game) {
-		super(game);
-		// TODO Auto-generated constructor stub
+    public TitleScreen(Demo game) {
+        super(game);
 
-		tabla = new Table();
-		tabla.setFillParent(true);
+        tabla = new Table();
+        tabla.setFillParent(true);
 
-		this.uiStage.addActor(tabla);
+        // Añadir la tabla al stage
+        uiStage.addActor(tabla);
 
-		TextButton boton = new TextButton("Jugar", ResourceManager.textButtonStyle);
-		boton.addListener((Event e) -> {
-			if (!(e instanceof InputEvent) || !((InputEvent) e).getType().equals(Type.touchDown))
-				return false;
-			this.dispose();
-			game.setScreen(new GameScreen(game));
-			return false;
-		});
-		tabla.add(boton);
+        // Crear botón "Jugar"
+        TextButton botonJugar = new TextButton("Jugar", ResourceManager.textButtonStyle);
+        botonJugar.addListener((Event e) -> {
+            if (!(e instanceof InputEvent) || !((InputEvent) e).getType().equals(Type.touchDown))
+                return false;
+            this.dispose();
+            if (Params.gameScreen == null) {
+                game.setScreen(new GameScreen(game));
+            } else {
+                game.setScreen(Params.gameScreen);
+            }
+            return false;
+        });
 
-		TextButton botonOpciones = new TextButton("Opciones", ResourceManager.textButtonStyle);
-		tabla.add(botonOpciones);
-		tabla.row();
-		TextButton botonSalir = new TextButton("Salir", ResourceManager.textButtonStyle);
-		botonSalir.addListener((Event e) -> {
-			if (!(e instanceof InputEvent) || !((InputEvent) e).getType().equals(Type.touchDown))
-				return false;
-			this.dispose();
-			Gdx.app.exit();
-			return false;
-		});
-		tabla.add(botonSalir);
-	}
+        // Crear botón "Opciones"
+        TextButton botonOpciones = new TextButton("Opciones", ResourceManager.textButtonStyle);
 
-	@Override
-	public void render(float delta) {
-		// TODO Auto-generated method stub
-		super.render(delta);
+        // Crear botón "Salir"
+        TextButton botonSalir = new TextButton("Salir", ResourceManager.textButtonStyle);
+        botonSalir.addListener((Event e) -> {
+            if (!(e instanceof InputEvent) || !((InputEvent) e).getType().equals(Type.touchDown))
+                return false;
+            this.dispose();
+            Gdx.app.exit();
+            return false;
+        });
 
-		uiStage.act();
-		uiStage.draw();
+        // Agregar los botones a la tabla
+        tabla.add(botonJugar).padBottom(20).row();
+        tabla.add(botonOpciones).padBottom(20).row();
+        tabla.add(botonSalir).padBottom(20).row();
+    }
 
-	}
+    @Override
+    public void render(float delta) {
+        super.render(delta);
+        uiStage.act(delta);
+        uiStage.draw();
+    }
 
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        // Actualizar el tamaño de la pantalla
+        Params.setAltoPantalla(height);
+        Params.setAnchoPantalla(width);
+    }
 }

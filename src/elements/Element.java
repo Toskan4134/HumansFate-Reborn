@@ -166,7 +166,7 @@ public class Element extends Actor {
 			setRectangle();
 	}
 
-	public Animation<TextureRegion> loadSegmentedAnimagion(String[] names, float frameDuration, boolean loop) {
+	public Animation<TextureRegion> loadSegmentedAnimation(String[] names, float frameDuration, boolean loop) {
 
 		Array<TextureRegion> textureArray = new Array<TextureRegion>();
 
@@ -220,28 +220,13 @@ public class Element extends Actor {
 		return anim;
 	}
 
-	public Animation<TextureRegion> loadFullAnimation(String name) {
-		Texture texture = ResourceManager.getTexture(name);
-		// texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		int frameWidth = texture.getWidth();
-		int frameHeight = texture.getHeight();
-
-		TextureRegion[][] temp = TextureRegion.split(texture, frameWidth, frameHeight);
-
-		Array<TextureRegion> textureArray = new Array<TextureRegion>();
-
-		textureArray.add(temp[0][0]);
-
-		Animation<TextureRegion> anim = new Animation<TextureRegion>(1, textureArray);
-
-		anim.setPlayMode(Animation.PlayMode.NORMAL);
-
-		if (animation == null) {
-
-			this.setAnimation(anim);
-		}
-
-		return anim;
+	public Animation<TextureRegion> loadSprite(String nombre) {
+	    Texture texture = ResourceManager.getTexture(nombre);
+	    Array<TextureRegion> textureList = new Array<TextureRegion>();
+	    textureList.add(new TextureRegion(texture));
+	    Animation<TextureRegion> anim = new Animation<TextureRegion>(0, textureList);
+	    this.setAnimation(anim);
+	    return anim;
 	}
 
 	public void applyPhysics(float dt) {

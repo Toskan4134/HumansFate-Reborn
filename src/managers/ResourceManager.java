@@ -1,5 +1,7 @@
 package managers;
 
+import org.w3c.dom.Text;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
@@ -32,20 +34,22 @@ public final class ResourceManager {
 		assets.setLoader(TiledMap.class, new TmxMapLoader());
 		assets.load("maps/mapa0.tmx", TiledMap.class);
 		assets.load("maps/mapa2.tmx", TiledMap.class);
-		// elementos de mapa
-		// assets.load("maps/Images/arbol.png", Texture.class);
+		assets.load("maps/Human'sFate.tmx", TiledMap.class);
+
 		assets.load("maps/images/barrel.png", Texture.class);
-		// enemigos
-		assets.load("enemies/blob.png", Texture.class);
-		assets.load("enemies/blob_jump.png", Texture.class);
+
 		// jugador
-		assets.load("player/espaldaWalk.png", Texture.class);
+		assets.load("player/derechaQuieto.png", Texture.class);
+		assets.load("player/derechaMoviendo.png", Texture.class);
+		assets.load("player/izquierdaQuieto.png", Texture.class);
+		assets.load("player/izquierdaMoviendo.png", Texture.class);
 		assets.load("player/grande.png", Texture.class);
 		assets.load("player/frenteWalk.png", Texture.class);
 		assets.load("player/frenteGrande.png", Texture.class);
 		assets.load("player/izquieredawalk.png", Texture.class);
 		assets.load("player/derechawalk.png", Texture.class);
-		assets.load("player/Bola.png", Texture.class);
+		assets.load("player/food.png", Texture.class);
+		assets.load("player/water.png", Texture.class);
 
 		// objetos
 		// assets.load("objects/bomb.png",Texture.class);
@@ -56,10 +60,32 @@ public final class ResourceManager {
 		// Audio
 		assets.load("audio/sounds/jump.mp3", Sound.class);
 		assets.load("audio/music/swing.mp3", Music.class);
+		assets.load("audio/music/space.mp3", Music.class);
 
 		// UI
 		assets.load("ui/rojo.jpg", Texture.class);
 		assets.load("ui/morado.jpg", Texture.class);
+		assets.load("ui/dayProgressBar/progressBarAnimated.png", Texture.class);
+		for (int i = 0; i < 11; i++) {
+			String fileName = String.format("ui/dayProgressBar/%d.png", i);
+			assets.load(fileName, Texture.class);
+		}
+		for (int i = 0; i < 10; i++) {
+			String fileName = String.format("ui/hunger/%d.png", i);
+			assets.load(fileName, Texture.class);
+		}
+		for (int i = 0; i < 10; i++) {
+			String fileName = String.format("ui/thirst/%d.png", i);
+			assets.load(fileName, Texture.class);
+		}
+		for (int i = 0; i < 10; i++) {
+			String fileName = String.format("ui/exercise/%d.png", i);
+			assets.load(fileName, Texture.class);
+		}
+		for (int i = 0; i < 32; i++) {
+			String fileName = String.format("ui/progressBar/%d.png", i);
+			assets.load(fileName, Texture.class);
+		}
 
 		// a�adir m�s elementos
 
@@ -72,7 +98,7 @@ public final class ResourceManager {
 	public static void botones() {
 
 		// estilo para botones
-		FreeTypeFontGenerator ftfg = new FreeTypeFontGenerator(Gdx.files.internal("sans.ttf"));
+		FreeTypeFontGenerator ftfg = new FreeTypeFontGenerator(Gdx.files.internal("VCR_OSD.ttf"));
 		FreeTypeFontParameter ftfp = new FreeTypeFontParameter();
 
 		ftfp.size = 36;
