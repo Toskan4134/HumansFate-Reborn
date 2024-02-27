@@ -27,12 +27,16 @@ public class Player extends Element {
 
 	public Player(float x, float y, Stage s) {
 		super(x, y, s);
-
+		stopFront = loadFullAnimation("player/frenteQuieto.png", 2, 1, 0.5f, true);
 		stopRight = loadFullAnimation("player/derechaQuieto.png", 2, 1, 0.5f, true);
 		moveRight = loadFullAnimation("player/derechaMoviendo.png", 2, 1, 0.5f, true);
 		stopLeft = loadFullAnimation("player/izquierdaQuieto.png", 2, 1, 0.5f, true);
 		moveLeft = loadFullAnimation("player/izquierdaMoviendo.png", 2, 1, 0.5f, true);
+		stopBack = loadFullAnimation("player/espaldaQuieto.png", 2, 1, 0.5f, true);
+		moveFront = loadFullAnimation("player/frenteMoviendo.png", 2, 1, 0.5f, true);
+		moveBack = loadFullAnimation("player/espaldaMoviendo.png", 2, 1, 0.5f, true);
 
+		this.setAnimation(stopFront);
 		this.setPolygon(8);
 		this.acceleration = Params.acceleration;
 		this.maxSpeed = Params.maxSpeed;
@@ -75,29 +79,29 @@ public class Player extends Element {
 			if (velocity.x > 0) {
 				direction = 1;
 				this.setAnimation(moveRight);
-			} else {
+			} else if (velocity.x < 0) {
 				direction = 3;
 				this.setAnimation(moveLeft);
 			}
 
 		} else if (Math.abs(velocity.x) < Math.abs(velocity.y)) {
-			if (velocity.y < 0) {
+			if (velocity.y > 0) {
 				direction = 0;
-				// this.setAnimation(moveBack);
-			} else {
+				this.setAnimation(moveBack);
+			} else if (velocity.y < 0) {
 				direction = 2;
-				// this.setAnimation(moveFront);
+				this.setAnimation(moveFront);
 			}
 		} else {
 			switch (direction) {
 			case 0:
-				// this.setAnimation(stopBack);
+				this.setAnimation(stopBack);
 				break;
 			case 1:
 				this.setAnimation(stopRight);
 				break;
 			case 2:
-				// this.setAnimation(stopFront);
+				this.setAnimation(stopFront);
 				break;
 			case 3:
 				this.setAnimation(stopLeft);

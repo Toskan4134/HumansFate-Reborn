@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import elements.Minigame;
 import game.Params;
+import managers.SoundManager;
 import screens.GameScreen;
 import screens.LoadScreen;
 
@@ -28,13 +29,18 @@ public class GymGame extends Minigame {
 			gameScreen.key.loadSprite("ui/keys/KeyS.png");
 			lastKey = Keys.W;
 			actualPoints++;
+			SoundManager.playSound("audio/sounds/point.mp3");
+
 		} else if (Gdx.input.isKeyJustPressed(Keys.S) && (lastKey == Keys.W || lastKey == -1)) {
 			gameScreen.key.loadSprite("ui/keys/KeyW.png");
 			lastKey = Keys.S;
 			actualPoints++;
+			SoundManager.playSound("audio/sounds/point.mp3");
+
 		} else if ((Gdx.input.isKeyJustPressed(Keys.W) && lastKey == Keys.W)
 				|| (Gdx.input.isKeyJustPressed(Keys.S) && lastKey == Keys.S)) {
 			actualPoints = 0;
+			SoundManager.playSound("audio/sounds/fail.mp3");
 		} else if (lastKey == -1) {
 			gameScreen.key.loadSprite("ui/keys/KeyW.png");
 		}
@@ -48,6 +54,7 @@ public class GymGame extends Minigame {
 	private void endMinigame() {
 		setIsEnabled(false);
 		gameScreen.key.setEnabled(false);
+		SoundManager.playSound("audio/sounds/success.mp3");
 		Params.exercise = Math.min(Params.MAX_POINTS, Params.EXERCISE_LOSS + Params.EXERCISE_LOSS * 2);
 		gameScreen.player.canMove = true;
 		gameScreen.player.isInteracting = false;

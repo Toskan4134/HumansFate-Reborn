@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import elements.Interaction;
 import elements.Projectile;
+import managers.SoundManager;
 import screens.GameScreen;
 
 public class Faucet extends Interaction {
@@ -33,6 +34,7 @@ public class Faucet extends Interaction {
 		if (gameScreen.player.overlaps(this)) {
 			if (Gdx.input.isKeyJustPressed(Keys.E)) {
 				throwWater();
+				SoundManager.playSound("audio/sounds/success.mp3");
 			}
 		}
 		this.applyPhysics(delta);
@@ -62,8 +64,8 @@ public class Faucet extends Interaction {
 			waterCD = waterDefaultCD;
 
 			dropplets--;
-			float velocityX = MathUtils.random(1, 20);
-			float velocityY = MathUtils.random(-20, 20);
+			float velocityX = MathUtils.random(1, 30);
+			float velocityY = MathUtils.random(-50, -10);
 			this.water.shoot(velocityX, velocityY, this.getX() + 16, this.getY() + 32);
 		}
 	}

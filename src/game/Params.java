@@ -16,18 +16,18 @@ public class Params {
 	private static int anchoPantalla = 800;
 	private static int altoPantalla = 600;
 
-	public static boolean debug = true;
+	public static boolean debug = false;
 
 	// Audio;
 	public static float musicVolume = 0.04f;
-	public static float soundVolume = 1;
+	public static float soundVolume = 0.2f;
 
 	// public static float zoom=0.24f;
 	public static float zoom = 1f;
 
 	// Jugador
-	public static float jugadorx = 352;
-	public static float jugadory = 576;
+	public static float jugadorx = 640;
+	public static float jugadory = 896;
 	public static int acceleration = 100;
 	public static int maxSpeed = 300;
 	public static int deceleration = 70;
@@ -36,7 +36,7 @@ public class Params {
 	public static GameScreen gameScreen;
 	public static final int MAX_DAYS = 20;
 	public static int days;
-	public static final float MAX_SECS_PER_ROUND = 45f;
+	public static final float MAX_SECS_PER_ROUND = 40f;
 	public static float secsPerRound;
 	public static String deathCause;
 	public static boolean eventTileModified = false;

@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import elements.Interaction;
 import elements.Projectile;
+import managers.SoundManager;
 import screens.GameScreen;
 
 public class Fridge extends Interaction {
@@ -27,6 +28,7 @@ public class Fridge extends Interaction {
 		if (gameScreen.player.overlaps(this)) {
 			if (Gdx.input.isKeyJustPressed(Keys.E)) {
 				throwFood();
+				SoundManager.playSound("audio/sounds/success.mp3");
 			}
 		}
 		this.applyPhysics(delta);

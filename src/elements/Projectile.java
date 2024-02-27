@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import game.Params;
+import managers.SoundManager;
 import screens.GameScreen;
 
 public class Projectile extends Interaction {
@@ -101,6 +102,8 @@ public class Projectile extends Interaction {
 			gameScreen.player.isInteracting = false;
 			return;
 		}
+		SoundManager.playSound("audio/sounds/eat.mp3");
+
 		Params.hunger = MathUtils.clamp(Params.hunger + Params.HUNGER_LOSS * 2, 0, 12);
 		this.isEnabled = false;
 		this.setEnabled(false);
@@ -112,6 +115,7 @@ public class Projectile extends Interaction {
 
 	private void waterDrunk() {
 		Params.thirst = MathUtils.clamp(Params.thirst + Params.THIRST_LOSS / 3 * 2, 0, 12);
+		SoundManager.playSound("audio/sounds/drink.mp3");
 		this.setEnabled(false);
 	}
 }

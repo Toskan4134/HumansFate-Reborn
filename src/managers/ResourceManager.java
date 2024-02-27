@@ -32,35 +32,36 @@ public final class ResourceManager {
 
 		// mapas
 		assets.setLoader(TiledMap.class, new TmxMapLoader());
-		assets.load("maps/mapa0.tmx", TiledMap.class);
-		assets.load("maps/mapa2.tmx", TiledMap.class);
 		assets.load("maps/Human'sFate.tmx", TiledMap.class);
+		assets.load("maps/FinalScreen.tmx", TiledMap.class);
 
-		assets.load("maps/images/barrel.png", Texture.class);
+		assets.load("maps/images/button.png", Texture.class);
 
 		// jugador
 		assets.load("player/derechaQuieto.png", Texture.class);
 		assets.load("player/derechaMoviendo.png", Texture.class);
 		assets.load("player/izquierdaQuieto.png", Texture.class);
 		assets.load("player/izquierdaMoviendo.png", Texture.class);
-		assets.load("player/grande.png", Texture.class);
-		assets.load("player/frenteWalk.png", Texture.class);
-		assets.load("player/frenteGrande.png", Texture.class);
-		assets.load("player/izquieredawalk.png", Texture.class);
-		assets.load("player/derechawalk.png", Texture.class);
+		assets.load("player/espaldaQuieto.png", Texture.class);
+		assets.load("player/frenteQuieto.png", Texture.class);
+		assets.load("player/espaldaMoviendo.png", Texture.class);
+		assets.load("player/frenteMoviendo.png", Texture.class);
 		assets.load("player/food.png", Texture.class);
 		assets.load("player/water.png", Texture.class);
 
-		// objetos
-		// assets.load("objects/bomb.png",Texture.class);
-		// assets.load("objects/hookl.png",Texture.class);
-		// assets.load("objects/sword.png",Texture.class);
-		// assets.load("objects/swordA.png",Texture.class);
-
 		// Audio
 		assets.load("audio/sounds/jump.mp3", Sound.class);
-		assets.load("audio/music/swing.mp3", Music.class);
+		assets.load("audio/sounds/point.mp3", Sound.class);
+		assets.load("audio/sounds/success.mp3", Sound.class);
+		assets.load("audio/sounds/fail.mp3", Sound.class);
+		assets.load("audio/sounds/eat.mp3", Sound.class);
+		assets.load("audio/sounds/sleep.mp3", Sound.class);
+		assets.load("audio/sounds/alert.mp3", Sound.class);
+		assets.load("audio/sounds/dead.mp3", Sound.class);
+		assets.load("audio/sounds/drink.mp3", Sound.class);
+
 		assets.load("audio/music/space.mp3", Music.class);
+		assets.load("audio/music/endSong.mp3", Music.class);
 
 		// UI
 		assets.load("ui/rojo.jpg", Texture.class);
@@ -93,6 +94,10 @@ public final class ResourceManager {
 			String fileName = String.format("ui/sleep/%d.png", i);
 			assets.load(fileName, Texture.class);
 		}
+		for (int i = 0; i < 10; i++) {
+			String fileName = String.format("ui/poop/%d.png", i);
+			assets.load(fileName, Texture.class);
+		}
 		for (int i = 0; i < 32; i++) {
 			String fileName = String.format("ui/progressBar/%d.png", i);
 			assets.load(fileName, Texture.class);
@@ -121,7 +126,7 @@ public final class ResourceManager {
 		buttonStyle = new LabelStyle();
 		buttonStyle.font = fuentePropia;
 		textButtonStyle = new TextButtonStyle();
-		Texture buttonText = ResourceManager.getTexture("maps/images/barrel.png");
+		Texture buttonText = ResourceManager.getTexture("maps/images/button.png");
 		NinePatch buttonPatch = new NinePatch(buttonText);
 		textButtonStyle.up = new NinePatchDrawable(buttonPatch);
 		textButtonStyle.font = fuentePropia;

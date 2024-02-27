@@ -4,6 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 import game.Params;
+import managers.SoundManager;
 import screens.GameScreen;
 
 public class Minigame extends Element {

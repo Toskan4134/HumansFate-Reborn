@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import elements.Minigame;
 import game.Params;
+import managers.SoundManager;
 import screens.GameScreen;
 import screens.LoadScreen;
 
@@ -17,7 +18,7 @@ public class PoopGame extends Minigame {
 	public PoopGame(float x, float y, Stage s, GameScreen gameScreen, int maxPoints) {
 		super(x, y, s, gameScreen, maxPoints);
 		// TODO Auto-generated constructor stub
-		this.maxCD = 0.3f;
+		this.maxCD = 0.25f;
 		this.CD = 0;
 	}
 
@@ -29,6 +30,7 @@ public class PoopGame extends Minigame {
 		gameScreen.key.loadSprite("ui/keys/KeySpace.png");
 		if (Gdx.input.isKeyJustPressed(Keys.SPACE)) {
 			actualPoints = Math.min(maxPoints, actualPoints + 1);
+			SoundManager.playSound("audio/sounds/point.mp3");
 		}
 		countdownBar(delta);
 		if (actualPoints == maxPoints) {
@@ -41,6 +43,7 @@ public class PoopGame extends Minigame {
 		setIsEnabled(false);
 		gameScreen.key.setEnabled(false);
 		Params.poop = Math.min(Params.MAX_POINTS, Params.poop + Params.POOP_LOSS + 3);
+		SoundManager.playSound("audio/sounds/success.mp3");
 		gameScreen.player.canMove = true;
 		gameScreen.player.isInteracting = false;
 		actualPoints = 0;

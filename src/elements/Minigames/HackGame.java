@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import elements.Minigame;
 import game.Params;
+import managers.SoundManager;
 import screens.GameScreen;
 
 public class HackGame extends Minigame {
@@ -19,7 +20,7 @@ public class HackGame extends Minigame {
 	public HackGame(float x, float y, Stage s, GameScreen gameScreen, int maxPoints) {
 		super(x, y, s, gameScreen, maxPoints);
 		this.lastKey = -1;
-		this.maxCD = 0.7f;
+		this.maxCD = 1f;
 		this.CD = maxCD;
 		this.newKey = true;
 	}
@@ -84,12 +85,15 @@ public class HackGame extends Minigame {
 		actualPoints++;
 		CD = maxCD;
 		newKey = true;
+		SoundManager.playSound("audio/sounds/point.mp3");
 	}
 
 	private void handleKeyMissed() {
-		actualPoints = 0;
+		actualPoints -= 5;
 		CD = maxCD;
 		newKey = true;
+		SoundManager.playSound("audio/sounds/fail.mp3");
+
 	}
 
 	private void countdownBar(float delta) {
@@ -108,6 +112,7 @@ public class HackGame extends Minigame {
 		gameScreen.map.getLayers().get("ScreenError").setVisible(false);
 		gameScreen.key.setEnabled(false);
 		gameScreen.player.canMove = true;
+		SoundManager.playSound("audio/sounds/success.mp3");
 		Params.eventTileModified = false;
 		gameScreen.player.isInteracting = false;
 		lastKey = -1;

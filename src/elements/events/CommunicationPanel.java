@@ -11,6 +11,7 @@ import elements.Minigame;
 import elements.Minigames.HackGame;
 import elements.Minigames.PoopGame;
 import game.Params;
+import managers.SoundManager;
 import screens.GameScreen;
 
 public class CommunicationPanel extends Event {
@@ -19,7 +20,7 @@ public class CommunicationPanel extends Event {
 	public CommunicationPanel(float x, float y, Stage s, float w, float h, String type, boolean isEnabled,
 			GameScreen gameScreen, String deathCause) {
 		super(x, y, s, w, h, type, isEnabled, gameScreen, deathCause);
-		hack = new HackGame(0, 0, getStage(), gameScreen, 15);
+		hack = new HackGame(0, 0, getStage(), gameScreen, 25);
 		gameScreen.minigames.add(hack);
 	}
 
@@ -30,12 +31,14 @@ public class CommunicationPanel extends Event {
 		if (!Params.eventTileModified) {
 			gameScreen.map.getLayers().get("Screen").setVisible(false);
 			gameScreen.map.getLayers().get("ScreenError").setVisible(true);
+			SoundManager.playSound("audio/sounds/alert.mp3");
+
 			Params.eventTileModified = true;
 		}
 		if (gameScreen.player.overlaps(this)) {
 			if (Gdx.input.isKeyJustPressed(Keys.E)) {
 				gameScreen.player.isInteracting = true;
-				gameScreen.player.direction = 3;
+				gameScreen.player.direction = 0;
 				playerLockInMiddle(false);
 				hack.setIsEnabled(true);
 				isEnabled = false;

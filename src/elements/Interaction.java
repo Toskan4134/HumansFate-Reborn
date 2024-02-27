@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 import game.Params;
+import managers.SoundManager;
 import screens.GameScreen;
 
 public class Interaction extends Element {
@@ -59,9 +60,11 @@ public class Interaction extends Element {
 	private void executeAction(float delta) {
 		switch (this.type) {
 		case "Exit":
-
-			gameScreen.player.setY(1136);
-			gameScreen.player.setX(1134);
+			gameScreen.player.direction = 0;
+			playerLockInMiddle(true);
+			
+			gameScreen.player.setY(1440);
+			gameScreen.player.setX(1408);
 			gameScreen.player.isInteracting = true;
 			break;
 		case "Entrance":
@@ -69,13 +72,18 @@ public class Interaction extends Element {
 				gameScreen.player.isInteracting = false;
 				break;
 			}
-			gameScreen.player.setY(976);
-			gameScreen.player.setX(1120);
+			gameScreen.player.direction = 2;
+			playerLockInMiddle(true);
+			gameScreen.player.setY(1312);
+			gameScreen.player.setX(1408);
 			break;
 		case "Bed":
 			playerLockInMiddle(true);
+			gameScreen.player.direction = 2;
 			Params.secsPerRound = 0f;
 			Params.sleep = MathUtils.clamp(Params.sleep + Params.SLEEP_LOSS * 2, 0, 12 + Params.SLEEP_LOSS);
+			SoundManager.playSound("audio/sounds/sleep.mp3");
+
 			break;
 		}
 	}
@@ -86,5 +94,7 @@ public class Interaction extends Element {
 		gameScreen.player.setX(this.getX() + this.width / 2 - gameScreen.player.getWidth() / 2);
 		gameScreen.player.setY(this.getY() + this.height / 2 - gameScreen.player.getHeight() / 2);
 	}
+	
+
 
 }
