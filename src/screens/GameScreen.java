@@ -19,6 +19,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -26,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.Array;
 
 import elements.Element;
+import elements.Event;
 import elements.Interaction;
 import elements.Minigame;
 import elements.Player;
@@ -35,6 +37,7 @@ import elements.Interactions.Faucet;
 import elements.Interactions.Fridge;
 import elements.Interactions.Toilet;
 import elements.Minigames.PoopGame;
+import elements.events.CommunicationPanel;
 import game.Demo;
 import game.Params;
 import managers.AudioManager;
@@ -48,22 +51,25 @@ public class GameScreen extends BScreen {
 	public Array<Solid> suelo;
 	public Array<Solid> muerte;
 	public Array<Interaction> interactions;
+	public Array<Event> events;
 	public Array<Minigame> minigames;
+
+	OrthographicCamera camara;
+	public TiledMap map;
+	private int tileWidth, tileHeight, mapWidthInTiles, mapHeightInTiles, mapWidthInPixels, mapHeightInPixels;
+
+	private int[] primerPlano = new int[] { 3, 5 };
+
+	private Label interactionLabel;
+	private Label daysLabel;
+	private Label secondsLabel;
 	private Element progressBar;
 	private Element dayProgressBar;
 	private Element hungerProgress;
 	private Element thirstProgress;
 	private Element exerciseProgress;
-	Solid end;
-
-	OrthographicCamera camara;
-	private TiledMap map;
-	private int tileWidth, tileHeight, mapWidthInTiles, mapHeightInTiles, mapWidthInPixels, mapHeightInPixels;
-
-	private int[] primerPlano = new int[] { 3, 5 };
-	private Label interactionLabel;
-	private Label daysLabel;
-	private Label secondsLabel;
+	private Element sleepProgress;
+	public Element key;
 
 	private OrthogonalTiledMapRenderer renderer;
 
@@ -126,11 +132,13 @@ public class GameScreen extends BScreen {
 
 		// Interactions
 		loadInteractions();
+		loadEvents();
 		AudioManager.playMusic("audio/music/space.mp3");
 
 		generateUIStyle();
 
 		// UI
+		uiStage = new Stage();
 		daysLabel = new Label(Params.days + " Días", uiStyle);
 		secondsLabel = new Label((int) Params.secsPerRound + "s", uiStyle);
 		interactionLabel = new Label("Presiona la tecla \"E\" para interactuar", uiStyle);
@@ -140,10 +148,12 @@ public class GameScreen extends BScreen {
 		hungerProgress = new Element(Params.getAnchoPantalla() - 84, Params.getAltoPantalla() - 84, uiStage);
 		thirstProgress = new Element(Params.getAnchoPantalla() - 84 * 2, Params.getAltoPantalla() - 84, uiStage);
 		exerciseProgress = new Element(Params.getAnchoPantalla() - 84 * 3, Params.getAltoPantalla() - 84, uiStage);
+		sleepProgress = new Element(Params.getAnchoPantalla() - 84 * 4, Params.getAltoPantalla() - 84, uiStage);
+		key = new Element(Params.getAnchoPantalla() / 2 - 32, 140, uiStage);
+		key.setEnabled(false);
 	}
 
 	public void updateInterface() {
-		uiStage = new Stage();
 
 		// Day Progress Bar
 		dayProgressBar.loadSprite("ui/dayProgressBar/"
@@ -172,13 +182,22 @@ public class GameScreen extends BScreen {
 
 		// Stadistics UI
 		hungerProgress.loadSprite("ui/hunger/"
-				+ (int) (Math.floor((Params.MAX_POINTS - Params.hunger) * 9 / Params.MAX_POINTS)) + ".png");
+				+ Math.min(9, (int) (Math.floor((Params.MAX_POINTS - Params.hunger) * 9 / Params.MAX_POINTS)))
+				+ ".png");
 
 		thirstProgress.loadSprite("ui/thirst/"
-				+ (int) (Math.floor((Params.MAX_POINTS - Params.thirst) * 9 / Params.MAX_POINTS)) + ".png");
+				+ Math.min(9, (int) (Math.floor((Params.MAX_POINTS - Params.thirst) * 9 / Params.MAX_POINTS)))
+				+ ".png");
 
-		exerciseProgress.loadSprite("ui/exercise/"
-				+ (int) (Math.floor((Params.MAX_POINTS - Params.exercise) * 9 / Params.MAX_POINTS)) + ".png");
+		exerciseProgress
+				.loadSprite(
+						"ui/exercise/"
+								+ Math.min(9,
+										(int) (Math
+												.floor((Params.MAX_POINTS - Params.exercise) * 9 / Params.MAX_POINTS)))
+								+ ".png");
+		sleepProgress.loadSprite("ui/sleep/"
+				+ Math.min(9, (int) (Math.floor((Params.MAX_POINTS - Params.sleep) * 9 / Params.MAX_POINTS))) + ".png");
 
 		boolean playerOverlapsAnyInteraction = false;
 
@@ -188,10 +207,20 @@ public class GameScreen extends BScreen {
 				break;
 			}
 		}
+		for (Interaction event : events) {
+			if (player.overlaps(event) && event.isEnabled) {
+				playerOverlapsAnyInteraction = true;
+				break;
+			}
+		}
 		if (playerOverlapsAnyInteraction && !interactionLabel.isVisible() && !player.isInteracting) {
 			interactionLabel.setVisible(true);
-		} else if (interactionLabel.isVisible()) {
+			key.setEnabled(true);
+			key.loadSprite("ui/keys/KeyE.png");
+
+		} else if (!playerOverlapsAnyInteraction && !player.isInteracting) {
 			interactionLabel.setVisible(false);
+			key.setEnabled(false);
 		}
 
 		uiStage.addActor(daysLabel);
@@ -202,6 +231,52 @@ public class GameScreen extends BScreen {
 		uiStage.addActor(hungerProgress);
 		uiStage.addActor(thirstProgress);
 		uiStage.addActor(exerciseProgress);
+		uiStage.addActor(sleepProgress);
+		uiStage.addActor(key);
+	}
+
+	private void activateEvent() {
+		float probability = 0.1f + (0.8f * ((float) Params.days / Params.MAX_DAYS));
+		float random = MathUtils.random();
+		System.out.println(random + " " + probability);
+		if (random > probability) {
+			int randomIndex = MathUtils.random(0, events.size - 1);
+			Interaction event = events.get(randomIndex);
+
+			event.isEnabled = true;
+		}
+	}
+
+	public String getActivatedEventDeadCause() {
+		for (Event evento : events) {
+			if (evento.isEnabled) {
+				return evento.deathCause;
+			}
+		}
+		return null;
+	}
+
+	public void loadEvents() {
+		ArrayList<MapObject> eventHitboxes;
+		eventHitboxes = getRectangleList("Event");
+		Event work;
+		events = new Array<Event>();
+		MapProperties props;
+
+		for (MapObject event : eventHitboxes) {
+			props = event.getProperties();
+			if (props.get("Type").equals("CommunicationPanel")) {
+				work = new CommunicationPanel((float) props.get("x"), (float) props.get("y"), mainStage,
+						(float) props.get("width"), (float) props.get("height"), (String) props.get("Type"),
+						(boolean) props.get("Enabled"), this, (String) props.get("DeathCause"));
+			} else {
+				work = new Event((float) props.get("x"), (float) props.get("y"), mainStage, (float) props.get("width"),
+						(float) props.get("height"), (String) props.get("Type"), (boolean) props.get("Enabled"), this,
+						(String) props.get("DeathCause"));
+			}
+			events.add(work);
+		}
+
 	}
 
 	public void loadInteractions() {
@@ -280,8 +355,8 @@ public class GameScreen extends BScreen {
 			game.setScreen(new LoadScreen(game));
 		}
 
-		System.out.println("Thirst: " + Params.thirst + " - Hunger: " + Params.hunger + " - Sleep: " + Params.sleep
-				+ " - Poop: " + Params.poop);
+		// System.out.println("Thirst: " + Params.thirst + " - Hunger: " + Params.hunger
+		// + " - Sleep: " + Params.sleep + " - Poop: " + Params.poop);
 	}
 
 	public void updateTimer(float delta) {
@@ -315,8 +390,8 @@ public class GameScreen extends BScreen {
 	}
 
 	public void centrarCamara() {
-		this.camara.position.x = player.getX();
-		this.camara.position.y = player.getY();
+		this.camara.position.x = player.getX() + 32;
+		this.camara.position.y = player.getY() + 32;
 		camara.update();
 
 	}
@@ -335,6 +410,8 @@ public class GameScreen extends BScreen {
 			deathCause = "¡Demasiado sedentario! Nuestro aventurero se saltó el día de pierna y no se ha vuelto a levantar.";
 		} else if (Params.poop < 0) {
 			deathCause = "¡Atasco mortal! Nuestro héroe no pudo hacer su deber y tuvo un final de mierda.";
+		} else {
+			deathCause = getActivatedEventDeadCause();
 		}
 		if (deathCause != null) {
 			Params.deathCause = deathCause;
@@ -357,6 +434,7 @@ public class GameScreen extends BScreen {
 		restartInteractions();
 		Params.gameScreen = this;
 		game.setScreen(new DayScreen(game));
+		activateEvent();
 	}
 
 	public ArrayList<MapObject> getRectangleList(String propertyName) {
@@ -432,11 +510,15 @@ public class GameScreen extends BScreen {
 		super.resize(width, height);
 		Params.setAltoPantalla(height);
 		Params.setAnchoPantalla(width);
+		uiStage = new Stage();
 		dayProgressBar.setPosition(20, Params.getAltoPantalla() - 64);
 		progressBar.setPosition(Params.getAnchoPantalla() / 2 - 128, 80);
 		hungerProgress.setPosition(Params.getAnchoPantalla() - 84, Params.getAltoPantalla() - 84);
 		thirstProgress.setPosition(Params.getAnchoPantalla() - 84 * 2, Params.getAltoPantalla() - 84);
 		exerciseProgress.setPosition(Params.getAnchoPantalla() - 84 * 3, Params.getAltoPantalla() - 84);
+		sleepProgress.setPosition(Params.getAnchoPantalla() - 84 * 4, Params.getAltoPantalla() - 84);
+		key.setPosition(Params.getAnchoPantalla() / 2 - 32, 140);
+
 		camara.setToOrtho(false, width, height);
 	}
 }

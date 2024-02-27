@@ -65,6 +65,13 @@ public final class ResourceManager {
 		// UI
 		assets.load("ui/rojo.jpg", Texture.class);
 		assets.load("ui/morado.jpg", Texture.class);
+		assets.load("ui/keys/KeySpace.png", Texture.class);
+		assets.load("ui/keys/KeyS.png", Texture.class);
+		assets.load("ui/keys/KeyW.png", Texture.class);
+		assets.load("ui/keys/KeyE.png", Texture.class);
+		assets.load("ui/keys/KeyA.png", Texture.class);
+		assets.load("ui/keys/KeyD.png", Texture.class);
+
 		assets.load("ui/dayProgressBar/progressBarAnimated.png", Texture.class);
 		for (int i = 0; i < 11; i++) {
 			String fileName = String.format("ui/dayProgressBar/%d.png", i);
@@ -80,6 +87,10 @@ public final class ResourceManager {
 		}
 		for (int i = 0; i < 10; i++) {
 			String fileName = String.format("ui/exercise/%d.png", i);
+			assets.load(fileName, Texture.class);
+		}
+		for (int i = 0; i < 10; i++) {
+			String fileName = String.format("ui/sleep/%d.png", i);
 			assets.load(fileName, Texture.class);
 		}
 		for (int i = 0; i < 32; i++) {

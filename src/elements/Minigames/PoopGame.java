@@ -25,6 +25,8 @@ public class PoopGame extends Minigame {
 	public void act(float delta) {
 		if (!isEnabled)
 			return;
+		gameScreen.key.setEnabled(true);
+		gameScreen.key.loadSprite("ui/keys/KeySpace.png");
 		if (Gdx.input.isKeyJustPressed(Keys.SPACE)) {
 			actualPoints = Math.min(maxPoints, actualPoints + 1);
 		}
@@ -37,6 +39,7 @@ public class PoopGame extends Minigame {
 
 	private void endMinigame() {
 		setIsEnabled(false);
+		gameScreen.key.setEnabled(false);
 		Params.poop = Math.min(Params.MAX_POINTS, Params.poop + Params.POOP_LOSS + 3);
 		gameScreen.player.canMove = true;
 		gameScreen.player.isInteracting = false;

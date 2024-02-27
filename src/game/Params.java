@@ -39,6 +39,7 @@ public class Params {
 	public static final float MAX_SECS_PER_ROUND = 45f;
 	public static float secsPerRound;
 	public static String deathCause;
+	public static boolean eventTileModified = false;
 
 	public static final int MAX_POINTS = 12;
 	public static final int HUNGER_LOSS = 3;

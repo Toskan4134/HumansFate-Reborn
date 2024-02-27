@@ -23,15 +23,20 @@ public class GymGame extends Minigame {
 	public void act(float delta) {
 		if (!isEnabled)
 			return;
+		gameScreen.key.setEnabled(true);
 		if (Gdx.input.isKeyJustPressed(Keys.W) && (lastKey == Keys.S || lastKey == -1)) {
+			gameScreen.key.loadSprite("ui/keys/KeyS.png");
 			lastKey = Keys.W;
 			actualPoints++;
 		} else if (Gdx.input.isKeyJustPressed(Keys.S) && (lastKey == Keys.W || lastKey == -1)) {
+			gameScreen.key.loadSprite("ui/keys/KeyW.png");
 			lastKey = Keys.S;
 			actualPoints++;
 		} else if ((Gdx.input.isKeyJustPressed(Keys.W) && lastKey == Keys.W)
 				|| (Gdx.input.isKeyJustPressed(Keys.S) && lastKey == Keys.S)) {
 			actualPoints = 0;
+		} else if (lastKey == -1) {
+			gameScreen.key.loadSprite("ui/keys/KeyW.png");
 		}
 
 		if (actualPoints == maxPoints) {
@@ -42,6 +47,7 @@ public class GymGame extends Minigame {
 
 	private void endMinigame() {
 		setIsEnabled(false);
+		gameScreen.key.setEnabled(false);
 		Params.exercise = Math.min(Params.MAX_POINTS, Params.EXERCISE_LOSS + Params.EXERCISE_LOSS * 2);
 		gameScreen.player.canMove = true;
 		gameScreen.player.isInteracting = false;

@@ -15,7 +15,7 @@ public class Toilet extends Interaction {
 
 	public Toilet(float x, float y, Stage s, float w, float h, String type, boolean isEnabled, GameScreen gameScreen) {
 		super(x, y, s, w, h, type, isEnabled, gameScreen);
-		toilet = new PoopGame(0, 0, getStage(), gameScreen, 15);
+		toilet = new PoopGame(0, 0, getStage(), gameScreen, 20);
 		gameScreen.minigames.add(toilet);
 	}
 
