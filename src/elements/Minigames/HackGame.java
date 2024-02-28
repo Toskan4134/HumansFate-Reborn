@@ -89,7 +89,7 @@ public class HackGame extends Minigame {
 	}
 
 	private void handleKeyMissed() {
-		actualPoints -= 5;
+		actualPoints = Math.max(actualPoints - 5, 0);
 		CD = maxCD;
 		newKey = true;
 		SoundManager.playSound("audio/sounds/fail.mp3");
